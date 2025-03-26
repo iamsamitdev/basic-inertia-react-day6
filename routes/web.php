@@ -17,7 +17,7 @@ Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('
 Route::post('/register', [RegisterController::class, 'register']);
 
 // เส้นทางสำหรับแสดงหน้า dashboard
-Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard')->middleware(['auth']);
 
 // เส้นทางสำหรับออกจากระบบ
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

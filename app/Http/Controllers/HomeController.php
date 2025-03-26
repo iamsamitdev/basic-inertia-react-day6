@@ -67,10 +67,61 @@ class HomeController extends Controller
     }
 
     /**
-     * แสดงหน้า dashboard
+     * แสดงหน้าแดชบอร์ด
      */
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        return Inertia::render('dashboard');
+        // ข้อมูลผู้ใช้ที่เข้าสู่ระบบ
+        $user = $request->user();
+        
+        // ข้อมูลสถิติตัวอย่าง
+        $stats = [
+            'visitors' => rand(100, 1000),
+            'sales' => rand(10, 100),
+            'revenue' => rand(10000, 100000),
+            'growth' => rand(1, 20) . '%'
+        ];
+        
+        // ข้อมูลกราฟตัวอย่าง
+        $chartData = [
+            'labels' => ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
+            'data' => [
+                rand(10, 100),
+                rand(10, 100),
+                rand(10, 100),
+                rand(10, 100),
+                rand(10, 100),
+                rand(10, 100)
+            ]
+        ];
+        
+        // ข้อมูลการแจ้งเตือน
+        $notifications = [
+            [
+                'id' => 1,
+                'message' => 'มีการสั่งซื้อใหม่',
+                'time' => '10 นาทีที่แล้ว',
+                'read' => false
+            ],
+            [
+                'id' => 2,
+                'message' => 'ส่งอีเมลยืนยันเรียบร้อยแล้ว',
+                'time' => '1 ชั่วโมงที่แล้ว',
+                'read' => true
+            ]
+        ];
+        
+        // จำนวนสมาชิกทีมงาน
+        $teamCount = User::teamMembers()->count();
+        
+        // ส่งข้อมูลไปยัง dashboard.tsx component
+        return Inertia::render('dashboard', [
+            'user' => $user,
+            'stats' => $stats,
+            'chartData' => $chartData,
+            'notifications' => $notifications,
+            'serverTime' => now()->format('d/m/Y H:i:s'),
+            'teamCount' => $teamCount,
+        ]);
     }
 }
